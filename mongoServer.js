@@ -14,6 +14,14 @@ let dbUrl = properties.get('db.dbUrl');
 let dbParams = properties.get('db.params');
 const uri = dbPprefix + dbUsername + ':' + dbPwd + dbUrl + dbParams;
 
+// Set up client
+const client = new MongoClient(uri, {serverApi: ServerApiVersion.v1});
+// The database that will be used within mongoDB
+const db = client.db(dbName);
+
+// The collections that will be used
+const productsCollection = db.collection("Products");
+const ordersCollection = db.collection("Orders");
 
 // Exporting the collections 
-module.exports = {};
+module.exports = { productsCollection, ordersCollection };
