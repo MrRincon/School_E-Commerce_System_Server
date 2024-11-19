@@ -5,17 +5,27 @@ const bodyParser = require('body-parser');
 const { productsCollection, ordersCollection } = require('../mongoServer.js');
 let generatedID = [];
 const accessGetPost = express();
+accessGetPost.use(bodyParser.json());
 accessGetPost.set('json spaces', 3);
 
-// Function to generate an Id for the new orders placed
-function generateID(){ 
-    while (true) {// Check the global array for the random number
-        let randomId = "2" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-        if (!generatedID.includes(randomId)) {// If it doesn't exist, add it to the global array and return for future use
-            generatedID.push(randomId);
-            return randomId;
+// Function to generate a random Id for the new orders placed
+function generateRandomID() {
+    let randomId = "2" + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    return randomId;// Return the random id
+};
+
+// Async function to make sure that the id generated is unique
+async function generateUniqueID(){
+    let uniqueID;
+    let isNotUnique = true;
+    while (isNotUnique){// Generates a new random id for the order until the id is not found in the orders collection
+        uniqueID = generateRandomID();// Call the function that generates the random id
+        const existingOrder = await ordersCollection.findOne({ id: uniqueID });
+        if(!existingOrder){// Break the loop when the id is unique
+            isNotUnique = false;
         }
     }
+    return uniqueID;// Returns the unique generated id 
 }
 
 // GET for all the lessons
@@ -24,17 +34,30 @@ accessGetPost.get(`/lessons`, async (req, res) => {
         const lessons = await productsCollection.find({}).toArray();// Find all the lessons from the collection
         res.json(lessons);// Send the lessons as a json format
     } catch (error) {
-        res.status(500).json({success: false, message: `Error with internal server: ${error}`});
+        res.status(500).json({ success: false, message: `Error with internal server: ${error}` });
     }
 });
 
 // Get for all the orders
-accessGetPost.get(`/orders`, async(req, res) => {
+accessGetPost.get(`/orders`, async (req, res) => {
     try {// Try catch for any errors when trying to fetch the orders
         const orders = await ordersCollection.find({}).toArray();// Find all the orders from the collection
         res.json(orders);// Send the orders as a json format
+        await client.close();
     } catch (error) {
-        res.status(500).json({success: false, message: `Error with internal server: ${error}`});
+        res.status(500).json({ success: false, message: `Error with internal server: ${error}` });
+    }
+})
+
+//POST for new orders
+accessGetPost.post(`/placeOrder`, async (req, res) => {
+    try {// Try catch for any errors of the req.body
+        const data = req.body;
+        data.id = await generateUniqueID();// Assigned the id to the order data in the body of the request, once generated and confirmed
+        await ordersCollection.insertOne(data);// Insert the order data in the orders collection
+        res.json({success: true, user: data});// Send a response with the orders data back
+    } catch (error) {
+        res.status(500).json({ success: false, message: `Error with internal server: ${error}` });
     }
 })
 
