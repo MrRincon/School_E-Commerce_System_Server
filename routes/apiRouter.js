@@ -1,5 +1,6 @@
 // Import the necessary modules
 const express = require('express');
+const cors = require('cors');
 // Defining the array of IP addresses that are allowed to access the API
 const ALLOWED_IPS = ['127.0.0.1', '123.456.7.89'];
 // Creating a new router instance from express to handle API routes and middleware
@@ -16,5 +17,7 @@ api.use(function(req,res,next) {
         next();
     }
 });
+// Extra Middleware to allow Cross-Origin Resource Sharing
+api.use(cors());
 // Exports all the api functions
 module.exports = api;
