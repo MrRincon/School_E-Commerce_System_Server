@@ -7,7 +7,6 @@ const accessGetPost = require('./serverGetPost.js');
 
 // Define port which the server will listen
 const PORT = process.env.PORT || 3000;
-// const HOST = process.env.HOST || '0.0.0.0';
 // Initialises an express app, which is the main object used to set up middlewares, routes, and start the server
 const app = express();
 
@@ -29,9 +28,9 @@ app.use(accessGetPost);
 // Third Middleware to handle 404 errors
 app.use(function(req, res){
     //Sets the HTTP response status code to 404 ("Not Found")
-    res.status(404).send(`${res.statusCode}: File not found at http://${HOST}:${PORT}`);
+    res.status(404).send(`${res.statusCode}: File not found at ${PORT}`);
 });
 // Starting the server on the defined port (3000)
 app.listen(PORT, ()=>{
-    console.log(`App started on port: http://${HOST}:${PORT}`);
+    console.log(`App started on port: ${PORT}`);
 });
