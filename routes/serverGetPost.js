@@ -34,7 +34,7 @@ accessGetPost.get(`/lessons`, async (req, res) => {
         const lessons = await productsCollection.find({}).toArray();// Find all the lessons from the collection
         res.json(lessons);// Send the lessons as a json format
     } catch (error) {
-        res.status(500).json({ success: false, message: `Error with internal server: ${error}` });
+        res.status(500).json({ success: false, message: `Error getting the lessons with internal server: ${error}` });
     }
 });
 
@@ -43,9 +43,9 @@ accessGetPost.get(`/orders`, async (req, res) => {
     try {// Try catch for any errors when trying to fetch the orders
         const orders = await ordersCollection.find({}).toArray();// Find all the orders from the collection
         res.json(orders);// Send the orders as a json format
-        await client.close();
+        // await client.close();
     } catch (error) {
-        res.status(500).json({ success: false, message: `Error with internal server: ${error}` });
+        res.status(500).json({ success: false, message: `Error getting the orders with internal server: ${error}` });
     }
 })
 
@@ -55,9 +55,25 @@ accessGetPost.post(`/placeOrder`, async (req, res) => {
         const data = req.body;
         data.id = await generateUniqueID();// Assigned the id to the order data in the body of the request, once generated and confirmed
         await ordersCollection.insertOne(data);// Insert the order data in the orders collection
-        res.json({success: true, user: data});// Send a response with the orders data back
+        res.json({success: true, order: data});// Send a response with the orders data back
     } catch (error) {
-        res.status(500).json({ success: false, message: `Error with internal server: ${error}` });
+        res.status(500).json({ success: false, message: `Error placing the order with internal server: ${error}` });
+    }
+})
+
+//PUT for updating the lessons
+accessGetPost.put(`/updateLessons`, async (req, res) => {
+    try {// Try catch for any errors of the req.body
+        const data = req.body;
+        console.log(data.purchasedLessonsID);
+        for( let lessonID of data.purchasedLessonsID){// Looping through all the elements in the data inside the request
+            const filter = { id: lessonID };
+            const update = { $inc: { available: -1 } };
+            await productsCollection.updateOne(filter, update);// For each element found with specific id, update the vailable value
+        }
+        res.json({success: true, message: "Lessons updated successfully."});// Return a successful response
+    } catch (error) {
+        res.status(500).json({ success: false, message: `Error updating the lessons with internal server: ${error}`});
     }
 })
 
