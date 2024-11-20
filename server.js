@@ -6,7 +6,7 @@ const cors = require('cors');
 const accessGetPost = require('./serverGetPost.js');
 
 // Define port which the server will listen
-const port = 3000;
+const port = process.env.PORT || 3000;
 // Initialises an express app, which is the main object used to set up middlewares, routes, and start the server
 const app = express();
 
@@ -31,6 +31,6 @@ app.use(function(req, res){
     res.status(404).send(`${res.statusCode}: File not found!`);
 });
 // Starting the server on the defined port (3000)
-app.listen(port, '0.0.0.0', ()=>{
+app.listen(port, ()=>{
     console.log(`App started on port http://localhost:${port}`);
 });
