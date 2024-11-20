@@ -7,6 +7,7 @@ const accessGetPost = require('./serverGetPost.js');
 
 // Define port which the server will listen
 const port = process.env.PORT || 3000;
+console.log(port);
 // Initialises an express app, which is the main object used to set up middlewares, routes, and start the server
 const app = express();
 
