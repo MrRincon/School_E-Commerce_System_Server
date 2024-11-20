@@ -31,6 +31,6 @@ app.use(function(req, res){
     res.status(404).send(`${res.statusCode}: File not found!`);
 });
 // Starting the server on the defined port (3000)
-app.listen(port, '0.0.0.0', ()=>{
+app.listen(port, ()=>{
     console.log(`App started on port http://localhost:${port}`);
 });
