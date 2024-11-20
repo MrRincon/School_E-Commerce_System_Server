@@ -32,5 +32,5 @@ app.use(function(req, res){
 });
 // Starting the server on the defined port (3000)
 app.listen(port, ()=>{
-    console.log(`App started on port http://localhost:${port}`);
+    console.log(`App started on port: ${port}`);
 });
