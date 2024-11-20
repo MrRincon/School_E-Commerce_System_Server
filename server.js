@@ -14,8 +14,8 @@ const app = express();
 app.use(morgan('short'));// Using morgan to add a logger that outputs each request to the console
 
 // Second Middleware to server static files
-var publicPath = path.join(__dirname, '../School_E-Commerce_System_Site');// Locate the Site folder
-var imagePath = path.join(__dirname, '../School_E-Commerce_System_Site/images');
+var publicPath = 'https://mrrincon.github.io/School_E-Commerce_System_Site/';// Locate the Site folder
+var imagePath = 'https://mrrincon.github.io/School_E-Commerce_System_Site/images';
 app.use(express.static(publicPath));// Using the path with express.static so express can server the files from the folder
 app.use(express.static(imagePath));
 
@@ -28,7 +28,7 @@ app.use(accessGetPost);
 // Third Middleware to handle 404 errors
 app.use(function(req, res){
     //Sets the HTTP response status code to 404 ("Not Found")
-    res.status(404).send(`${res.statusCode}: File not found! ${port}`);
+    res.status(404).send(`${res.statusCode}: File not found! ${publicPath}`);
 });
 // Starting the server on the defined port (3000)
 app.listen(port, ()=>{
