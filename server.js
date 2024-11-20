@@ -2,7 +2,8 @@
 const express = require('express');// Main server framework
 const morgan = require('morgan');// Logger middleware to track incoming requests
 const path = require('path');// To work with file and directory paths
-const api = require('./routes/apiRouter.js');
+const cors = require('cors');
+const accessGetPost = require('./serverGetPost.js');
 
 // Define port which the server will listen
 const port = 3000;
@@ -18,7 +19,11 @@ var imagePath = path.join(__dirname, '../School_E-Commerce_System_Site/images');
 app.use(express.static(publicPath));// Using the path with express.static so express can server the files from the folder
 app.use(express.static(imagePath));
 
-app.use(api);// Using a router to implement authorisation and manage all the GET and POST 
+// Extra Middleware to allow Cross-Origin Resource Sharing
+app.use(cors());
+
+// Diverts all the requests to another router to manage all the GET and POST methods
+app.use(accessGetPost);
 
 // Third Middleware to handle 404 errors
 app.use(function(req, res){
