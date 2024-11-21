@@ -19,6 +19,17 @@ const client = new MongoClient(uri, {serverApi: ServerApiVersion.v1});
 // The database that will be used within mongoDB
 const db = client.db(dbName);
 
+// Function to test the connection with the database
+async function testConnection() {
+    try {
+        await client.connect();
+        console.log('Connected to MongoDB.');
+    } catch (error) {
+        console.log(`Failed to connect to MongoDB ${error}`);
+    }
+}
+testConnection();
+
 // The collections that will be used
 const productsCollection = db.collection("Products");
 const ordersCollection = db.collection("Orders");
