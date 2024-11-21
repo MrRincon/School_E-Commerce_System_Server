@@ -27,6 +27,11 @@ async function generateUniqueID(){
     return uniqueID;// Returns the unique generated id 
 }
 
+// GET to welcome to the server
+accessGetPost.get(`/`, (req, res) => {
+    res.send("Welcome to SchoolFlex")
+})
+
 // GET for all the lessons
 accessGetPost.get(`/lessons`, async (req, res) => {
     try {// Try catch for any errors when trying to fetch the lessons
