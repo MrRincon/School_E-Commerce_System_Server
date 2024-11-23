@@ -56,12 +56,13 @@ accessGetPost.get(`/orders`, async (req, res) => {
 // POST for searched lessons
 accessGetPost.post('/search', async (req, res) => {
     try {
-        const searchTerm = req.body;
+        const searchQ = req.body;
+        console.log(searchQ);
         const query = {
             $or: [
-                { subject: { $regex: new RegExp(searchTerm, 'i') } },
-                { location: { $regex: new RegExp(searchTerm, 'i') } },
-                { price: { $lte: Number(searchTerm) } }
+                { subject: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
+                { location: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
+                { price: { $lte: Number(searchQ.searchTerm) } }
             ]
         };
         const results = await productsCollection.find(query).toArray();
