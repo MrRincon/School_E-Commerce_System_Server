@@ -53,8 +53,8 @@ accessGetPost.get(`/orders`, async (req, res) => {
     }
 })
 
-// GET for searched lessons
-accessGetPost.get('/search', async (req, res) => {
+// POST for searched lessons
+accessGetPost.post('/search', async (req, res) => {
     try {
         const searchTerm = req.body;
         const query = {
