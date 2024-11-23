@@ -61,11 +61,10 @@ accessGetPost.post('/search', async (req, res) => {
             $or: [
                 { subject: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
                 { location: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
-                { price: { $lte: Number(searchQ.searchTerm) } }
+                { price: { $regex: new RegExp(searchQ.searchTerm, 'i') } }
             ]
         };
         const results = await productsCollection.find(query).toArray();
-        console.log(results);
         res.json(results);
     } catch (error) {
         res.status(500).json({ err: 'Internal server error when searching' });
