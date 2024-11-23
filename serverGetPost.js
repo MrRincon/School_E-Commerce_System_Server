@@ -14,13 +14,13 @@ function generateRandomID() {
 };
 
 // Async function to make sure that the id generated is unique
-async function generateUniqueID(){
+async function generateUniqueID() {
     let uniqueID;
     let isNotUnique = true;
-    while (isNotUnique){// Generates a new random id for the order until the id is not found in the orders collection
+    while (isNotUnique) {// Generates a new random id for the order until the id is not found in the orders collection
         uniqueID = generateRandomID();// Call the function that generates the random id
         const existingOrder = await ordersCollection.findOne({ id: uniqueID });
-        if(!existingOrder){// Break the loop when the id is unique
+        if (!existingOrder) {// Break the loop when the id is unique
             isNotUnique = false;
         }
     }
@@ -42,7 +42,7 @@ accessGetPost.get(`/lessons`, async (req, res) => {
     }
 });
 
-// Get for all the orders
+// GET for all the orders
 accessGetPost.get(`/orders`, async (req, res) => {
     try {// Try catch for any errors when trying to fetch the orders
         const orders = await ordersCollection.find({}).toArray();// Find all the orders from the collection
@@ -53,13 +53,31 @@ accessGetPost.get(`/orders`, async (req, res) => {
     }
 })
 
+// GET for searched lessons
+accessGetPost.get('/search', async (req, res) => {
+    try {
+        const searchTerm = req.body;
+        const query = {
+            $or: [
+                { subject: { $regex: new RegExp(searchTerm, 'i') } },
+                { location: { $regex: new RegExp(searchTerm, 'i') } },
+                { price: { $lte: Number(searchTerm) } }
+            ]
+        };
+        const results = await productsCollection.find(query).toArray();
+        res.json(results);
+    } catch (error) {
+        res.status(500).json({ err: 'Internal server error when searching' });
+    }
+})
+
 //POST for new orders
 accessGetPost.post(`/placeOrder`, async (req, res) => {
     try {// Try catch for any errors of the req.body
         const data = req.body;
         data.id = await generateUniqueID();// Assigned the id to the order data in the body of the request, once generated and confirmed
         await ordersCollection.insertOne(data);// Insert the order data in the orders collection
-        res.json({success: true, order: data});// Send a response with the orders data back
+        res.json({ success: true, order: data });// Send a response with the orders data back
     } catch (error) {
         res.status(500).json({ success: false, message: `Error placing the order with internal server: ${error}` });
     }
@@ -70,14 +88,14 @@ accessGetPost.put(`/updateLessons`, async (req, res) => {
     try {// Try catch for any errors of the req.body
         const data = req.body;
         console.log(data.purchasedLessonsID);
-        for( let lessonID of data.purchasedLessonsID){// Looping through all the elements in the data inside the request
+        for (let lessonID of data.purchasedLessonsID) {// Looping through all the elements in the data inside the request
             const filter = { id: lessonID };
             const update = { $inc: { available: -1 } };
             await productsCollection.updateOne(filter, update);// For each element found with specific id, update the vailable value
         }
-        res.json({success: true, message: "Lessons updated successfully."});// Return a successful response
+        res.json({ success: true, message: "Lessons updated successfully." });// Return a successful response
     } catch (error) {
-        res.status(500).json({ success: false, message: `Error updating the lessons with internal server: ${error}`});
+        res.status(500).json({ success: false, message: `Error updating the lessons with internal server: ${error}` });
     }
 })
 
