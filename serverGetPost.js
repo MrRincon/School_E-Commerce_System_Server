@@ -57,7 +57,6 @@ accessGetPost.get(`/orders`, async (req, res) => {
 accessGetPost.post('/search', async (req, res) => {
     try {
         const searchQ = req.body;
-        console.log(searchQ);
         const query = {
             $or: [
                 { subject: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
@@ -66,6 +65,7 @@ accessGetPost.post('/search', async (req, res) => {
             ]
         };
         const results = await productsCollection.find(query).toArray();
+        console.log(results);
         res.json(results);
     } catch (error) {
         res.status(500).json({ err: 'Internal server error when searching' });
