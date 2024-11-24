@@ -57,15 +57,22 @@ accessGetPost.get(`/orders`, async (req, res) => {
 accessGetPost.post('/search', async (req, res) => {
     try {
         const searchQ = req.body;
-        const query = {
-            $or: [
-                { subject: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
-                { location: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
-                { price: { $regex: new RegExp(searchQ.searchTerm, 'i') } }
-            ]
-        };
-        const results = await productsCollection.find(query).toArray();
-        res.json(results);
+        // If method to return an empty array if the search space is empty 
+        if (!searchQ.searchTerm || searchQ.searchTerm.trim() === '') {
+            res.json([]);
+        } else {
+            const query = {// Constructor for the mongoDB query to match the search
+                $or: [
+                    { subject: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
+                    { location: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
+                    { price: isNaN(Number(searchQ.searchTerm)) ? { $regex: new RegExp(searchQ.searchTerm, 'i') } : Number(searchQ.searchTerm) }
+                ]
+            };
+            // Implements the query search on the productsCollection and returns it in an array
+            const results = await productsCollection.find(query).toArray();
+            res.json(results);
+        }
+
     } catch (error) {
         res.status(500).json({ err: 'Internal server error when searching' });
     }
