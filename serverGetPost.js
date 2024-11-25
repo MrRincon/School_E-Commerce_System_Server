@@ -33,7 +33,7 @@ accessGetPost.get(`/`, (req, res) => {
 })
 
 // GET for all the lessons
-accessGetPost.get(`*/lessons`, async (req, res) => {
+accessGetPost.get(`/lessons`, async (req, res) => {
     try {// Try catch for any errors when trying to fetch the lessons
         const lessons = await productsCollection.find({}).toArray();// Find all the lessons from the collection
         res.json(lessons);// Send the lessons as a json format
@@ -43,7 +43,7 @@ accessGetPost.get(`*/lessons`, async (req, res) => {
 });
 
 // GET for all the orders
-accessGetPost.get(`*/orders`, async (req, res) => {
+accessGetPost.get(`/orders`, async (req, res) => {
     try {// Try catch for any errors when trying to fetch the orders
         const orders = await ordersCollection.find({}).toArray();// Find all the orders from the collection
         res.json(orders);// Send the orders as a json format
@@ -54,7 +54,7 @@ accessGetPost.get(`*/orders`, async (req, res) => {
 })
 
 // POST for searched lessons
-accessGetPost.post('*/search', async (req, res) => {
+accessGetPost.post('/search', async (req, res) => {
     try {
         const searchQ = req.body;
         // If method to return an empty array if the search space is empty 
@@ -79,7 +79,7 @@ accessGetPost.post('*/search', async (req, res) => {
 })
 
 //POST for new orders
-accessGetPost.post(`*/placeOrder`, async (req, res) => {
+accessGetPost.post(`/placeOrder`, async (req, res) => {
     try {// Try catch for any errors of the req.body
         const data = req.body;
         data.id = await generateUniqueID();// Assigned the id to the order data in the body of the request, once generated and confirmed
@@ -91,7 +91,7 @@ accessGetPost.post(`*/placeOrder`, async (req, res) => {
 })
 
 //PUT for updating the lessons
-accessGetPost.put(`*/updateLessons`, async (req, res) => {
+accessGetPost.put(`/updateLessons`, async (req, res) => {
     try {// Try catch for any errors of the req.body
         const data = req.body;
         console.log(data.purchasedLessonsID);
