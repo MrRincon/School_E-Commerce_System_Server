@@ -28,7 +28,7 @@ async function generateUniqueID() {
 }
 
 // GET to welcome to the server
-accessGetPost.get(`/`, (req, res) => {
+accessGetPost.get(`*/`, (req, res) => {
     res.send("Welcome to SchoolFlex")
 })
 
