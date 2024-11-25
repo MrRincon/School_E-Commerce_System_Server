@@ -54,7 +54,7 @@ accessGetPost.get(`/orders`, async (req, res) => {
 })
 
 // POST for searched lessons
-accessGetPost.post('/search', async (req, res) => {
+accessGetPost.post(`/search`, async (req, res) => {
     try {
         const searchQ = req.body;
         // If method to return an empty array if the search space is empty 
