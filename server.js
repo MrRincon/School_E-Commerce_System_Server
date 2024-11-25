@@ -14,9 +14,7 @@ const app = express();
 app.use(morgan('short'));// Using morgan to add a logger that outputs each request to the console
 
 // Second Middleware to server static files
-let publicPath = path.join(__dirname, '../School_E-Commerce_System_Site');// Locate the Site folder
 let imagePath = path.join(__dirname, './images');// Locate the images folder
-app.use(express.static(publicPath));// Using the path with express.static so express can server the files from the folder
 app.use(express.static(imagePath));
 
 // Extra Middleware to allow Cross-Origin Resource Sharing
