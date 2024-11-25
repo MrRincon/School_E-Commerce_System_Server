@@ -65,7 +65,8 @@ accessGetPost.post(`/search`, async (req, res) => {
                 $or: [
                     { subject: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
                     { location: { $regex: new RegExp(searchQ.searchTerm, 'i') } },
-                    { price: isNaN(Number(searchQ.searchTerm)) ? { $regex: new RegExp(searchQ.searchTerm, 'i') } : Number(searchQ.searchTerm) }
+                    { price: isNaN(Number(searchQ.searchTerm)) ? { $regex: new RegExp(searchQ.searchTerm, 'i') } : Number(searchQ.searchTerm) },
+                    { available: isNaN(Number(searchQ.searchTerm)) ? { $regex: new RegExp(searchQ.searchTerm, 'i') } : Number(searchQ.searchTerm) }
                 ]
             };
             // Implements the query search on the productsCollection and returns it in an array
